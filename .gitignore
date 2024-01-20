@@ -131,3 +131,4 @@ dmypy.json
 /vids
 
 .idea
+*.code-workspace
