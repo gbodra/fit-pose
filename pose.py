@@ -11,7 +11,7 @@ mp_pose = mp.solutions.pose
 pose = mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5)
 incorrect_angle_counter = 0
 
-outdir, inputflnm = './', 'vids/VID-20230704-WA0005.mp4'
+outdir, inputflnm = './', 'vids/WILL_NATACAO.mp4'
 
 cap = cv2.VideoCapture(inputflnm)
 
@@ -23,7 +23,7 @@ frame_width = int(cap.get(3))
 frame_height = int(cap.get(4))
 inflnm, inflext = inputflnm.split('.')
 out_filename = f'{outdir}{inflnm}_annotated_w_angle.mp4'
-out = cv2.VideoWriter(out_filename, cv2.VideoWriter_fourcc('H', '2', '6', '4'), 30, (frame_width, frame_height))
+out = cv2.VideoWriter(out_filename, cv2.VideoWriter_fourcc('H', '2', '6', '4'), 20, (frame_width, frame_height))
 # out = cv2.VideoWriter(out_filename, cv2.VideoWriter_fourcc('m', 'p', '4', 'v'), 40, (frame_width, frame_height))
 
 while cap.isOpened():
@@ -43,18 +43,26 @@ while cap.isOpened():
         angle = calculate_angles.get_angle(results.pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_HIP],
                                            results.pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_KNEE],
                                            results.pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_SHOULDER])
+        # angle_l = calculate_angles.get_angle(results.pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_SHOULDER],
+        #                                    results.pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_ELBOW],
+        #                                    results.pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_WRIST])
+        # angle_r = calculate_angles.get_angle(results.pose_landmarks.landmark[mp_pose.PoseLandmark.RIGHT_SHOULDER],
+        #                                    results.pose_landmarks.landmark[mp_pose.PoseLandmark.RIGHT_ELBOW],
+        #                                    results.pose_landmarks.landmark[mp_pose.PoseLandmark.RIGHT_WRIST])
 
         font = cv2.FONT_HERSHEY_SIMPLEX
         position = (50, frame_height - 50)
         fontScale = 1
+        color = (255, 0, 0)
 
-        if angle <= 0.0:
-            color = (0, 0, 255)
-            incorrect_angle_counter = incorrect_angle_counter + 1
-        else:
-            color = (255, 0, 0)
+        # if angle <= 0.0:
+        #     color = (0, 0, 255)
+        #     incorrect_angle_counter = incorrect_angle_counter + 1
+        # else:
+        #     color = (255, 0, 0)
 
         thickness = 2
+        # img_text = f"Angulo Dir: {angle_r:.2f} | Angulo Esq: {angle_l:.2f}"
         img_text = 'Angulo Movimento: ' + str(angle) + ' | Movimentos Incorretos: ' + str(incorrect_angle_counter)
         
         # Calculate the width and height of the text box
