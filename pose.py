@@ -11,7 +11,7 @@ mp_pose = mp.solutions.pose
 pose = mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5)
 incorrect_angle_counter = 0
 
-outdir, inputflnm = './', 'vids/WILL_NATACAO.mp4'
+outdir, inputflnm = './', 'vids/v_FrontCrawl_g01_c01.avi'
 
 cap = cv2.VideoCapture(inputflnm)
 
@@ -22,7 +22,7 @@ if cap.isOpened() == False:
 frame_width = int(cap.get(3))
 frame_height = int(cap.get(4))
 inflnm, inflext = inputflnm.split('.')
-out_filename = f'{outdir}{inflnm}_annotated_w_angle.mp4'
+out_filename = f'{outdir}{inflnm}_angle.mp4'
 out = cv2.VideoWriter(out_filename, cv2.VideoWriter_fourcc('H', '2', '6', '4'), 20, (frame_width, frame_height))
 # out = cv2.VideoWriter(out_filename, cv2.VideoWriter_fourcc('m', 'p', '4', 'v'), 40, (frame_width, frame_height))
 
