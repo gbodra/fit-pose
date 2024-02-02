@@ -4,9 +4,9 @@ from collections import Counter
 
 # Load the YOLOv8 model
 model = YOLO('yolov8s.pt')
-q
+
 # Open the video file
-video_path = "vids/IA_Presencial_2_Ed10.mp4"
+video_path = "vids/StartSe_Test_1.mp4"
 cap = cv2.VideoCapture(video_path)
 
 names = model.names
@@ -18,7 +18,7 @@ fps = cap.get(cv2.CAP_PROP_FPS)
 
 # Define the codec and create a VideoWriter object
 fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # Be sure to use lower case
-out = cv2.VideoWriter('vids/PeopleCounter_2_AI_Ed9.mp4', fourcc, fps, (width, height))
+out = cv2.VideoWriter('vids/StartSe_Test_1_out.mp4', fourcc, fps, (width, height))
 
 # Loop through the video frames
 while cap.isOpened():
@@ -39,8 +39,8 @@ while cap.isOpened():
             object_counts[object_name] += 1
 
         # Display the count of 'person' detections as an annotation on the video
-        if 'laptop' in object_counts:
-            cv2.putText(annotated_frame, f"Count Laptop: {object_counts['laptop']}", (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 0, 0), 2)
+        if 'person' in object_counts:
+            cv2.putText(annotated_frame, f"Count Laptop: {object_counts['person']}", (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 0, 0), 2)
 
         # Write the frame to the output file
         out.write(annotated_frame)

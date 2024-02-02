@@ -20,3 +20,9 @@ def get_angle(first_point, mid_point, last_point):
         result = 360.0 - result
 
     return round(result, 2)
+
+def shoulder_bending(first_point, last_point):
+    if first_point.x < last_point.x:
+        return True
+
+    return False

@@ -11,7 +11,7 @@ mp_pose = mp.solutions.pose
 pose = mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5)
 incorrect_angle_counter = 0
 
-outdir, inputflnm = './', 'vids/v_FrontCrawl_g01_c01.avi'
+outdir, inputflnm = './', 'vids/Braco_1.mp4'
 
 cap = cv2.VideoCapture(inputflnm)
 
@@ -40,9 +40,15 @@ while cap.isOpened():
     mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS)
 
     if results.pose_landmarks is not None:
-        angle = calculate_angles.get_angle(results.pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_HIP],
-                                           results.pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_KNEE],
-                                           results.pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_SHOULDER])
+        angle = calculate_angles.get_angle(results.pose_landmarks.landmark[mp_pose.PoseLandmark.RIGHT_SHOULDER],
+                                           results.pose_landmarks.landmark[mp_pose.PoseLandmark.RIGHT_ELBOW],
+                                           results.pose_landmarks.landmark[mp_pose.PoseLandmark.RIGHT_WRIST])
+
+        is_shoulder_bending = calculate_angles.shoulder_bending(results.pose_landmarks.landmark[mp_pose.PoseLandmark.RIGHT_SHOULDER],
+                                                                results.pose_landmarks.landmark[mp_pose.PoseLandmark.RIGHT_HIP])
+
+        if is_shoulder_bending:
+            print('Shoulder is bending')
         # angle_l = calculate_angles.get_angle(results.pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_SHOULDER],
         #                                    results.pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_ELBOW],
         #                                    results.pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_WRIST])
@@ -55,11 +61,11 @@ while cap.isOpened():
         fontScale = 1
         color = (255, 0, 0)
 
-        # if angle <= 0.0:
-        #     color = (0, 0, 255)
-        #     incorrect_angle_counter = incorrect_angle_counter + 1
-        # else:
-        #     color = (255, 0, 0)
+        if angle <= (180*0.8):
+            color = (0, 0, 255)
+            incorrect_angle_counter = incorrect_angle_counter + 1
+        else:
+            color = (255, 0, 0)
 
         thickness = 2
         # img_text = f"Angulo Dir: {angle_r:.2f} | Angulo Esq: {angle_l:.2f}"
