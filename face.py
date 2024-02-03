@@ -44,7 +44,6 @@ with mp_face_mesh.FaceMesh(
                 connections = mp_face_mesh.FACEMESH_CONTOURS,
                 landmark_drawing_spec = None,
                 connection_drawing_spec = my_drawing_specs
-                .get_default_face_mesh_contours_style()
             )
 
 
