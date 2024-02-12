@@ -7,11 +7,11 @@ from datetime import timedelta
 start_time = time.time()
 
 mp_drawing = mp.solutions.drawing_utils
-mp_pose = mp.solutions.pose 
+mp_pose = mp.solutions.pose
 pose = mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5)
 incorrect_angle_counter = 0
 
-outdir, inputflnm = './', 'vids/Braco_1.mp4'
+outdir, inputflnm = './', 'vids/will_terra.mp4'
 
 cap = cv2.VideoCapture(inputflnm)
 
@@ -24,7 +24,6 @@ frame_height = int(cap.get(4))
 inflnm, inflext = inputflnm.split('.')
 out_filename = f'{outdir}{inflnm}_angle.mp4'
 out = cv2.VideoWriter(out_filename, cv2.VideoWriter_fourcc('H', '2', '6', '4'), 20, (frame_width, frame_height))
-# out = cv2.VideoWriter(out_filename, cv2.VideoWriter_fourcc('m', 'p', '4', 'v'), 40, (frame_width, frame_height))
 
 while cap.isOpened():
     ret, image = cap.read()
@@ -47,14 +46,10 @@ while cap.isOpened():
         is_shoulder_bending = calculate_angles.shoulder_bending(results.pose_landmarks.landmark[mp_pose.PoseLandmark.RIGHT_SHOULDER],
                                                                 results.pose_landmarks.landmark[mp_pose.PoseLandmark.RIGHT_HIP])
 
-        if is_shoulder_bending:
-            print('Shoulder is bending')
-        # angle_l = calculate_angles.get_angle(results.pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_SHOULDER],
-        #                                    results.pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_ELBOW],
-        #                                    results.pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_WRIST])
-        # angle_r = calculate_angles.get_angle(results.pose_landmarks.landmark[mp_pose.PoseLandmark.RIGHT_SHOULDER],
-        #                                    results.pose_landmarks.landmark[mp_pose.PoseLandmark.RIGHT_ELBOW],
-        #                                    results.pose_landmarks.landmark[mp_pose.PoseLandmark.RIGHT_WRIST])
+        # Plot vertical point
+        vertical_x, vertical_y = calculate_angles.vertical_landmark(results.pose_landmarks, frame_width, frame_height)
+        # Draw a red circle on the frame
+        image = cv2.circle(image, (vertical_x, vertical_y), 10, (255, 0, 0), 2)
 
         font = cv2.FONT_HERSHEY_SIMPLEX
         position = (50, frame_height - 50)
@@ -77,6 +72,7 @@ while cap.isOpened():
         cv2.rectangle(image, box_coords[0], box_coords[1], (255, 255, 255), cv2.FILLED)
 
         image = cv2.putText(image, img_text, position, font, fontScale, color, thickness, cv2.LINE_AA)
+
     out.write(image)
 
 pose.close()

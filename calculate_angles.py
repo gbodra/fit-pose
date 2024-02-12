@@ -1,15 +1,5 @@
-# fun getAngle(firstPoint: PoseLandmark, midPoint: PoseLandmark, lastPoint: PoseLandmark): Double {
-#         var result = Math.toDegrees(atan2(lastPoint.getPosition().y - midPoint.getPosition().y,
-#                 lastPoint.getPosition().x - midPoint.getPosition().x)
-#                 - atan2(firstPoint.getPosition().y - midPoint.getPosition().y,
-#                 firstPoint.getPosition().x - midPoint.getPosition().x))
-#         result = Math.abs(result) // Angle should never be negative
-#         if (result > 180) {
-#             result = 360.0 - result // Always get the acute representation of the angle
-#         }
-#         return result
-#     }
 import math
+import mediapipe as mp
 
 
 def get_angle(first_point, mid_point, last_point):
@@ -26,3 +16,18 @@ def shoulder_bending(first_point, last_point):
         return True
 
     return False
+
+def vertical_landmark(pose_landmarks, frame_width, frame_height):
+    mp_pose = mp.solutions.pose
+    left_hip = pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_HIP]
+    right_hip = pose_landmarks.landmark[mp_pose.PoseLandmark.RIGHT_HIP]
+
+    if left_hip:
+        x = int(left_hip.x * frame_width)
+        y = int(left_hip.y * frame_height) + 50
+        return x, y
+
+    x = int(right_hip.x * frame_width)
+    y = int(right_hip.y * frame_height) + 50
+        
+    return x, y
