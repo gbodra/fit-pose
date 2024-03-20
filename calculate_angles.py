@@ -19,15 +19,27 @@ def shoulder_bending(first_point, last_point):
 
 def vertical_landmark(pose_landmarks, frame_width, frame_height):
     mp_pose = mp.solutions.pose
-    left_hip = pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_HIP]
-    right_hip = pose_landmarks.landmark[mp_pose.PoseLandmark.RIGHT_HIP]
+    hip_left = pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_HIP]
+    hip_right = pose_landmarks.landmark[mp_pose.PoseLandmark.RIGHT_HIP]
 
-    if left_hip:
-        x = int(left_hip.x * frame_width)
-        y = int(left_hip.y * frame_height) + 50
-        return x, y
+    ear_right = pose_landmarks.landmark[mp_pose.PoseLandmark.RIGHT_EAR]
+    ear_left = pose_landmarks.landmark[mp_pose.PoseLandmark.LEFT_EAR]
 
-    x = int(right_hip.x * frame_width)
-    y = int(right_hip.y * frame_height) + 50
-        
-    return x, y
+    if hip_left:
+        point_left = (int(hip_left.x * frame_width), int(hip_left.y * frame_height))
+    
+    if hip_right:
+        point_right = (int(hip_right.x * frame_width), int(hip_right.y * frame_height))
+
+    if ear_left:
+        point_left_top = (int(ear_left.x * frame_width), int(ear_left.y * frame_height))
+
+    if ear_right:
+        point_right_top = (int(ear_right.x * frame_width), int(ear_right.y * frame_height))
+
+    x_median = (point_left[0] + point_right[0]) / 2
+    # point_1 = (int(x_median), point_left[1] - 100)
+    point_1 = (int(x_median), point_left_top[1])
+    point_2 = (int(x_median), point_left[1] + 100)
+    
+    return point_1, point_2

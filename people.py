@@ -1,6 +1,10 @@
 import cv2
+import time
 from ultralytics import YOLO
 from collections import Counter
+
+# Record the start time
+start_time = time.time()
 
 # Load the YOLOv8 model
 model = YOLO('yolov8s.pt')
@@ -41,7 +45,7 @@ while cap.isOpened():
 
         # Display the count of 'person' detections as an annotation on the video
         if 'person' in object_counts:
-            cv2.putText(annotated_frame, f"Count Laptop: {object_counts['person']}", (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 0, 0), 2)
+            cv2.putText(annotated_frame, f"Count Person: {object_counts['person']}", (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 0, 0), 2)
 
         # Write the frame to the output file
         out.write(annotated_frame)
@@ -60,3 +64,11 @@ while cap.isOpened():
 cap.release()
 out.release()
 cv2.destroyAllWindows()
+
+# Record the end time
+end_time = time.time()
+
+# Calculate the runtime
+runtime = end_time - start_time
+
+print(f"The script took {runtime} seconds to run.")

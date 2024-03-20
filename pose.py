@@ -11,7 +11,7 @@ mp_pose = mp.solutions.pose
 pose = mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5)
 incorrect_angle_counter = 0
 
-outdir, inputflnm = './', 'vids/will_terra.mp4'
+outdir, inputflnm = './', 'vids/Braco_1.mp4'
 
 cap = cv2.VideoCapture(inputflnm)
 
@@ -47,9 +47,9 @@ while cap.isOpened():
                                                                 results.pose_landmarks.landmark[mp_pose.PoseLandmark.RIGHT_HIP])
 
         # Plot vertical point
-        vertical_x, vertical_y = calculate_angles.vertical_landmark(results.pose_landmarks, frame_width, frame_height)
-        # Draw a red circle on the frame
-        image = cv2.circle(image, (vertical_x, vertical_y), 10, (255, 0, 0), 2)
+        point_1, point_2 = calculate_angles.vertical_landmark(results.pose_landmarks, frame_width, frame_height)
+        # Draw a line between two points
+        image = cv2.line(image, point_1, point_2, (0, 255, 255), 10)
 
         font = cv2.FONT_HERSHEY_SIMPLEX
         position = (50, frame_height - 50)
